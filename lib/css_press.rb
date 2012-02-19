@@ -1,5 +1,7 @@
 require "css_press/version"
 require "css_press/css"
+require "css_press/min_css"
+require "css_press/node"
 
 module CssPress
   def self.press(text, options = {})
