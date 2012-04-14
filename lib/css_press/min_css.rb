@@ -71,12 +71,24 @@ module CSSPool
 
         "#{escape_css_identifier target.property}:" + target.expressions.map { |exp|
 
-          op = '/' == exp.operator ? ' /' : exp.operator
+          is_color = ['color', 'background', 'border'].include? target.property
 
-          [
-            op,
-            exp.accept(self),
-          ].join ' '
+          if is_color then
+            color = Color::min_color exp.to_s
+            is_color = !color.nil?
+          end
+
+          if !is_color then
+          
+            op = '/' == exp.operator ? ' /' : exp.operator
+
+            [
+              op,
+              exp.accept(self),
+            ].join ''
+          else
+            color
+          end
         }.join.strip + "#{important}"
 
       end
@@ -86,7 +98,11 @@ module CSSPool
       end
 
       visitor_for Terms::Hash do |target|
-        "##{target.value}"
+        value = Color::min_hex target.value
+        if value.nil? then
+          value = "##{target.value}"
+        end
+        value
       end
 
       visitor_for Selectors::Simple, Selectors::Universal do |target|
@@ -110,15 +126,20 @@ module CSSPool
       end
 
       visitor_for Terms::Rgb do |target|
-        params = [
-          target.red,
-          target.green,
-          target.blue
-        ].map { |c|
-          c.accept(self)
-        }.join ', '
+        begin
+          value = Color::min_rgb target
+        rescue ArgumentError
+          params = [
+            target.red,
+            target.green,
+            target.blue
+          ].map { |c|
+            c.accept(self)
+          }.join ','
 
-        %{rgb(#{params})}
+          value = "rgb(#{params})"
+        end
+        value
       end
 
       visitor_for Terms::String do |target|
