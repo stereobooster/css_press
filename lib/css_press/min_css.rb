@@ -71,25 +71,27 @@ module CSSPool
 
         "#{escape_css_identifier target.property}:" + target.expressions.map { |exp|
 
-          is_color = ['color', 'background', 'border'].include? target.property
+          special_value = nil
+          property = target.property.downcase
 
-          if is_color then
-            color = Color::min_color exp.to_s
-            is_color = !color.nil?
+          if /(color|background|background-color)/ =~  property then
+            special_value = Color::min_color exp.to_s
           end
 
-          if !is_color then
-          
-            op = '/' == exp.operator ? ' /' : exp.operator
+          if /border(\-(top|bottom|left|right))?/ =~ property then
+            if exp.to_s == 'none' then
+              special_value = '0'
+            else
+              special_value = Color::min_color exp.to_s
+            end
+          end
 
-            [
-              op,
-              exp.accept(self),
-            ].join ''
+          if special_value.nil? then
+            [exp.operator, exp.accept(self)].join
           else
-            color
+            special_value
           end
-        }.join.strip + "#{important}"
+        }.join(' ').strip + "#{important}"
 
       end
 
@@ -163,10 +165,22 @@ module CSSPool
       end
 
       visitor_for Terms::Number do |target|
+        value = target.value
+        if value == 0 then
+          value = '0'
+        else
+          trunc = value.truncate.round
+          fract = value - trunc
+          value = [
+            trunc == 0 ? '' : trunc.to_s,
+            fract == 0 ? '' : fract.to_s.sub(/^0/, '')
+          ].join
+        end
+
         [
-          target.unary_operator == :minus ? '-' : nil,
-          target.value,
-          target.type
+          target.unary_operator == :minus && target.value != 0 ? '-' : nil,
+          value,
+          target.value == 0 ? '' : target.type
         ].compact.join
       end
 
