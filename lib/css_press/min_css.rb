@@ -30,21 +30,24 @@ module CSSPool
         end
 
         target.rule_sets.each { |rs|
-          if rs.media != current_media_type
-            media = " " + rs.media.map do |medium|
-              escape_css_identifier medium.name.value
-            end.join(', ')
-            tokens << "@media#{media}{"
-          end
+          rule_sets = rs.accept(self)
+          if rule_sets != "" then
+            if rs.media != current_media_type
+              media = " " + rs.media.map do |medium|
+                escape_css_identifier medium.name.value
+              end.join(',')
+              tokens << "@media#{media}{"
+            end
 
-          tokens << rs.accept(self)
+            tokens << rule_sets
 
-          if rs.media != current_media_type
-            current_media_type = rs.media
-            tokens << "}"
+            if rs.media != current_media_type
+              current_media_type = rs.media
+              tokens << "}"
+            end
           end
         }
-        tokens.join("\n")
+        tokens.join
       end
 
       visitor_for CSS::Charset do |target|
@@ -73,9 +76,12 @@ module CSSPool
         temp = nil
         target.declarations.compact!
         
-        target.selectors.map { |sel| sel.accept self }.join(",") + "{" +
-        target.declarations.map { |decl| decl.nil? ? '' : decl.accept(self) }.join(";") +
-        "}"
+        declarations = target.declarations.map { |decl| decl.nil? ? '' : decl.accept(self) }.join(";")
+        if declarations == "" then
+          ""
+        else
+          target.selectors.map { |sel| sel.accept self }.join(",") + "{" + declarations + "}"
+        end
       end
 
       visitor_for CSS::Declaration do |target|

@@ -7,8 +7,8 @@ describe CssPress do
   end
 
   it "should raise error on malformed css" do
-    css_with_error = 'a { b: c';
-    expect { CssPress.press(css_with_error) }.to raise_error(Racc::ParseError)
+    expect { CssPress.press('a { b: c') }.to raise_error(Racc::ParseError)
+    expect { CssPress.press('a{;}') }.to raise_error(Racc::ParseError)
   end
 
   it "should remove unnecessary spaces" do
@@ -29,6 +29,11 @@ describe CssPress do
   # it "should minify class attributes" do
     # CssPress.press('a[class="x y z"]{b:c}').should eql 'a.x.y.z{b:c}'
     # CssPress.press('a[class="x.y z"]{b:c}').should eql 'a[class="x.y z"]{b:c}'
+  # end
+
+  # it "should minify id attributes" do
+    # CssPress.press('a[id="x"]{b:c}').should eql 'a#x{b:c}'
+    # CssPress.press('a[id="x.y z"]{b:c}').should eql 'a[id="x.y z"]{b:c}'
   # end
 
   it "should minify color" do
@@ -91,13 +96,12 @@ describe CssPress do
     # CssPress.press('a{background-position:0 0}').should eql 'a{background-position:0 0}'
   # end
 
-  # it "should remove empty rules" do
-    # CssPress.press('a{}').should eql ''
-    # CssPress.press('a{;}').should eql ''
-    # CssPress.press('a{/*b:c*/}').should eql ''
-    # CssPress.press('@media print{a{}b{c:d}}').should eql '@media print{b{c:d}}'
-    # CssPress.press('@media print{a{}}').should eql ''
-  # end
+  it "should remove empty rules" do
+    CssPress.press('a{}').should eql ''
+    CssPress.press('a{/*b:c*/}').should eql ''
+    CssPress.press('@media print{a{}}').should eql ''
+    CssPress.press('@media print{a{}b{c:d}}').should eql '@media print{b{c:d}}'
+  end
 
   # it "should combine all background related properties" do
     # css_in = 'a{
