@@ -61,8 +61,20 @@ module CSSPool
       end
 
       visitor_for CSS::RuleSet do |target|
+        temp = {}
+        i = 0
+        target.declarations.each do |decl|
+          if temp.has_key?(decl.property) then
+            target.declarations[temp[decl.property]] = nil
+          end
+          temp[decl.property] = i
+          i+=1
+        end
+        temp = nil
+        target.declarations.compact!
+        
         target.selectors.map { |sel| sel.accept self }.join(",") + "{" +
-        target.declarations.map { |decl| decl.accept self }.join(";") +
+        target.declarations.map { |decl| decl.nil? ? '' : decl.accept(self) }.join(";") +
         "}"
       end
 

@@ -76,9 +76,13 @@ describe CssPress do
     CssPress.press('a{border-bottom:none}').should eql 'a{border-bottom:0}'
   end
 
-  # it "should remove duplicate rules" do
-    # CssPress.press('a{color:#fff;color:#000}').should eql 'a{color:#000}'
-  # end
+  it "should remove duplicate rules" do
+    CssPress.press('a{x:y;x:z}').should eql 'a{x:z}'
+    CssPress.press('a{x:y1;b:b;x:z}').should eql 'a{b:b;x:z}'
+    CssPress.press('a{c:c;x:y;b:b;x:z}').should eql 'a{c:c;b:b;x:z}'
+    CssPress.press('a{c:c;x:y;b:b;x:z;d:d;x:x}').should eql 'a{c:c;b:b;d:d;x:x}'
+    CssPress.press('a{c:c;x:y;b:b;x:z;c:c;x:x}').should eql 'a{b:b;c:c;x:x}'
+  end
 
   # it "should remove unnecessary values from padding/margin" do
     # CssPress.press('a{padding:0 0 0 0}').should eql 'a{padding:0}'
