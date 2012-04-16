@@ -87,6 +87,11 @@ describe CssPress do
     CssPress.press('a{c:c;x:y;b:b;x:z}').should eql 'a{c:c;b:b;x:z}'
     CssPress.press('a{c:c;x:y;b:b;x:z;d:d;x:x}').should eql 'a{c:c;b:b;d:d;x:x}'
     CssPress.press('a{c:c;x:y;b:b;x:z;c:c;x:x}').should eql 'a{b:b;c:c;x:x}'
+    # Safari does not support the "quotes" property.
+    # CSS 2; used to remove quotes in case "none" fails below.
+    # CSS 2.1; will remove quotes if supported, and override the above. 
+    # User-agents that don't understand "none" should ignore it, and keep the above value.
+    CssPress.press('q:before,q:after{content:"";content:none}').should eql 'q:before,q:after{content:"";content:none}'
   end
 
   # it "should remove unnecessary values from padding/margin" do

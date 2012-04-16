@@ -64,10 +64,20 @@ module CSSPool
       end
 
       visitor_for CSS::RuleSet do |target|
+
+        is_q = false
+        selectors = target.selectors.map do |sel| 
+          selector = sel.accept self
+          if selector =~ /^q:(after|before)/ then
+            is_q = true
+          end
+          selector
+        end.join(",") 
+
         temp = {}
         i = 0
         target.declarations.each do |decl|
-          if temp.has_key?(decl.property) then
+          if temp.has_key?(decl.property) && !(decl.property == 'content' && is_q) then
             target.declarations[temp[decl.property]] = nil
           end
           temp[decl.property] = i
@@ -80,7 +90,7 @@ module CSSPool
         if declarations == "" then
           ""
         else
-          target.selectors.map { |sel| sel.accept self }.join(",") + "{" + declarations + "}"
+          selectors + "{" + declarations + "}"
         end
       end
 
