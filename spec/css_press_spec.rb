@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-require_relative "../lib/css_press"
+require File.expand_path("../lib/css_press", File.dirname(__FILE__))
 
 describe CssPress do
   before :each do
