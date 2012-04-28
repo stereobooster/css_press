@@ -34,7 +34,7 @@ module CSSPool
           if rule_sets != "" then
             if rs.media != current_media_type
               media = " " + rs.media.map do |medium|
-                escape_css_identifier medium.name.value
+              medium.name.map{ |i| i.accept(self) }.join(' ')
               end.join(',')
               tokens << "@media#{media}{"
             end
@@ -57,7 +57,7 @@ module CSSPool
       visitor_for CSS::ImportRule do |target|
         media = ''
         media = " " + target.media.map do |medium|
-          escape_css_identifier medium.name.value
+          medium.name.map{ |i| i.accept(self) }.join(' ')
         end.join(', ') if target.media.length > 0
 
         "@import #{target.uri.accept(self)}#{media};"
@@ -135,10 +135,9 @@ module CSSPool
         value
       end
 
-      visitor_for Selectors::Simple, Selectors::Universal do |target|
-        ([target.name] + target.additional_selectors.map { |x|
-          x.accept self
-        }).join
+      visitor_for Selectors::MediaExpression do |target|
+        '(' + escape_css_string(target.name) + ':' + 
+          target.value.map { |x| x.accept self }.join + ')'
       end
 
       visitor_for Terms::URI do |target|
@@ -176,22 +175,6 @@ module CSSPool
         "\"#{escape_css_string target.value}\""
       end
 
-      visitor_for Selector do |target|
-        target.simple_selectors.map { |ss| ss.accept self }.join
-      end
-
-      visitor_for Selectors::Type do |target|
-        combo = {
-          :s => ' ',
-          :+ => '+',
-          :> => '>'
-        }[target.combinator]
-
-        name = target.name == '*' ? '*' : escape_css_identifier(target.name)
-        [combo, name].compact.join +
-          target.additional_selectors.map { |as| as.accept self }.join
-      end
-
       visitor_for Terms::Number do |target|
         value = target.value
         if value == 0 then
@@ -212,6 +195,22 @@ module CSSPool
         ].compact.join
       end
 
+      visitor_for Selector do |target|
+        target.simple_selectors.map { |ss| ss.accept self }.join
+      end
+
+      visitor_for Selectors::Simple, Selectors::Universal, Selectors::Type do |target|
+        combo = {
+          :s => ' ',
+          :+ => '+',
+          :> => '>'
+        }[target.combinator]
+
+        name = [nil, '*'].include?(target.name) ? target.name : escape_css_identifier(target.name)
+        [combo, name].compact.join +
+          target.additional_selectors.map { |as| as.accept self }.join
+      end
+
       visitor_for Selectors::Id do |target|
         "##{escape_css_identifier target.name}"
       end
@@ -225,6 +224,14 @@ module CSSPool
           ":#{escape_css_identifier target.name}"
         else
           ":#{escape_css_identifier target.name}(#{escape_css_identifier target.extra})"
+        end
+      end
+
+      visitor_for Selectors::PseudoElement do |target|
+        if target.css2.nil?
+          "::#{escape_css_identifier target.name}"
+        else
+          ":#{escape_css_identifier target.name}"
         end
       end
 
