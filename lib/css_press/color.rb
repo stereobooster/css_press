@@ -20,6 +20,7 @@ module CSSPool
       def color_val value, result, hash
         val = result.nil? ? value : result
         if hash && val.length == 6 && val[0] == val[1] && val[2] == val[3] && val[4] == val[5] then
+          val = val.chars.to_a
           val = result = val[0] + val[2] + val[4]
         end
         if !result.nil? then
