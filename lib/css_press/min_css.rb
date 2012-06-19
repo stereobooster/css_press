@@ -180,12 +180,11 @@ module CSSPool
         if value == 0 then
           value = '0'
         else
-          trunc = value.truncate.round
-          fract = value - trunc
+          trunc, fract = value.to_s.split('.')
           value = [
-            trunc == 0 ? '' : trunc.to_s,
-            fract == 0 ? '' : fract.to_s.sub(/^0/, '')
-          ].join
+            trunc == '0' ? '' : trunc,
+            fract == '0' || fract.nil? ? nil : fract.sub(/0+$/, '')
+          ].compact.join('.')
         end
 
         [

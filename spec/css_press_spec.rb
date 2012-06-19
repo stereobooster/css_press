@@ -75,6 +75,13 @@ describe CssPress do
     CssPress.press('a{margin:-1.0%}').should eql 'a{margin:-1%}'
     CssPress.press('a{margin:-0.1%}').should eql 'a{margin:-.1%}'
     CssPress.press('a{margin:-0.0%}').should eql 'a{margin:0}'
+
+    CssPress.press('a{padding:1.00%}').should eql 'a{padding:1%}'
+    CssPress.press('a{padding:1.50%}').should eql 'a{padding:1.5%}'
+  end
+
+  it "should work with float values" do
+    CssPress.press('div{width:10.05%}').should eql 'div{width:10.05%}'
   end
 
   it "should change none to 0" do
