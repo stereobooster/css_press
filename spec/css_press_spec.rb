@@ -12,8 +12,7 @@ describe CssPress do
   end
 
   it "should remove unnecessary spaces" do
-    CssPress.press('a { b: c ; }').should eql 'a{b:c}'
-    # CssPress.press('a { b : c ; }').should eql 'a{b:c}'
+    CssPress.press('a { b : c ; }').should eql 'a{b:c}'
   end
 
   # it "should remove unnecessary quotes from urls" do
@@ -31,9 +30,11 @@ describe CssPress do
     # CssPress.press('a[class="x.y z"]{b:c}').should eql 'a[class="x.y z"]{b:c}'
   # end
 
-  # it "should minify id attributes" do
-    # CssPress.press('a[id="x"]{b:c}').should eql 'a#x{b:c}'
-    # CssPress.press('a[id="x.y z"]{b:c}').should eql 'a[id="x.y z"]{b:c}'
+  # it "should remove default values from attributes" do
+    # what about :disabled
+    # CssPress.press('a[disabled="disabled"]{b:c}').should eql 'a[disabled]{b:c}'
+    # CssPress.press('a[selected=selected]{b:c}').should eql 'a[selected]{b:c}'
+    # CssPress.press('a[checked=checked]{b:c}').should eql 'a[checked]{b:c}'
   # end
 
   it "should minify color" do
@@ -74,6 +75,13 @@ describe CssPress do
     CssPress.press('a{margin:-1.0%}').should eql 'a{margin:-1%}'
     CssPress.press('a{margin:-0.1%}').should eql 'a{margin:-.1%}'
     CssPress.press('a{margin:-0.0%}').should eql 'a{margin:0}'
+
+    CssPress.press('a{padding:1.00%}').should eql 'a{padding:1%}'
+    CssPress.press('a{padding:1.50%}').should eql 'a{padding:1.5%}'
+  end
+
+  it "should work with float values" do
+    CssPress.press('div{width:10.05%}').should eql 'div{width:10.05%}'
   end
 
   it "should change none to 0" do
@@ -91,7 +99,10 @@ describe CssPress do
     # CSS 2; used to remove quotes in case "none" fails below.
     # CSS 2.1; will remove quotes if supported, and override the above. 
     # User-agents that don't understand "none" should ignore it, and keep the above value.
-    CssPress.press('q:before,q:after{content:"";content:none}').should eql 'q:before,q:after{content:"";content:none}'
+    css = 'q:before,q:after{content:"";content:none}'
+    CssPress.press(css).should eql css
+    # css = 'pre{white-space:pre;white-space:pre-wrap}'
+    # CssPress.press(css).should eql css
   end
 
   # it "should remove unnecessary values from padding/margin" do
