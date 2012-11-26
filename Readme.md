@@ -11,7 +11,10 @@ csspool: [![Build Status](https://secure.travis-ci.org/stereobooster/css_press.p
 
 ## Alternatives
 
- - [rainpres](https://github.com/sprsquish/rainpress). Seems to be dead ☠.
+ - [yuicssmin](https://github.com/matthiassiegel/yuicssmin). Ruby. The YUICSSMIN gem provides CSS compression using YUI compressor from Yahoo. It uses the Javascript port via ExecJS.
+ - [cssminify](https://github.com/matthiassiegel/cssminify) Ruby. CSS minification with YUI compressor, but as native Ruby port.
  - [css-compressor](https://github.com/codenothing/css-compressor). The best of the best. P☣P :(
- - [yuicompressor](https://github.com/yui/yuicompressor). Java
- - [ruby-yui-compressor](https://github.com/sstephenson/ruby-yui-compressor). Ruby wrapper for yuicompressor
+ - [yuicompressor](https://github.com/yui/yuicompressor). Java. Ruby wrapper: [ruby-yui-compressor](https://github.com/sstephenson/ruby-yui-compressor)
+ - [rainpress](https://github.com/sprsquish/rainpress). Ruby. Seems to be dead ☠.
+ - http://friggeri.net/blog/a-genetic-approach-to-css-compression/
+ 
