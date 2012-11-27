@@ -15,27 +15,32 @@ describe CssPress do
     CssPress.press('a { b : c ; }').should eql 'a{b:c}'
   end
 
-  # it "should remove unnecessary quotes from urls" do
-    # CssPress.press('a{b:url( "i.gif" )}').should eql 'a{b:url(i.gif)}'
-    # CssPress.press('a{b:url( " i.gif" )}').should eql 'a{b:url(" i.gif")}'
-  # end
+  it "should remove unnecessary quotes from urls" do
+    pending "Not implemented yet" do
+      CssPress.press('a{b:url( "i.gif" )}').should eql 'a{b:url(i.gif)}'
+      CssPress.press('a{b:url( " i.gif" )}').should eql 'a{b:url(" i.gif")}'
+    end
+  end
 
   it "should remove unnecessary quotes from attributes" do
     CssPress.press('a[d="e"]{b:c}').should eql 'a[d=e]{b:c}'
     CssPress.press('a[d="e f"]{b:c}').should eql 'a[d="e f"]{b:c}'
   end
 
-  # it "should minify class attributes" do
-    # CssPress.press('a[class="x y z"]{b:c}').should eql 'a.x.y.z{b:c}'
-    # CssPress.press('a[class="x.y z"]{b:c}').should eql 'a[class="x.y z"]{b:c}'
-  # end
+  it "should minify class attributes" do
+    pending "Not implemented yet" do
+      CssPress.press('a[class="x y z"]{b:c}').should eql 'a.x.y.z{b:c}'
+      CssPress.press('a[class="x.y z"]{b:c}').should eql 'a[class="x.y z"]{b:c}'
+    end
+  end
 
-  # it "should remove default values from attributes" do
-    # what about :disabled
-    # CssPress.press('a[disabled="disabled"]{b:c}').should eql 'a[disabled]{b:c}'
-    # CssPress.press('a[selected=selected]{b:c}').should eql 'a[selected]{b:c}'
-    # CssPress.press('a[checked=checked]{b:c}').should eql 'a[checked]{b:c}'
-  # end
+  it "should remove default values from attributes" do
+    pending "Not implemented yet" do
+      CssPress.press('a[disabled="disabled"]{b:c}').should eql 'a[disabled]{b:c}'
+      CssPress.press('a[selected=selected]{b:c}').should eql 'a[selected]{b:c}'
+      CssPress.press('a[checked=checked]{b:c}').should eql 'a[checked]{b:c}'
+    end
+  end
 
   it "should minify color" do
     CssPress.press('a{color:#aaaaaa}').should eql 'a{color:#aaa}'
@@ -105,12 +110,14 @@ describe CssPress do
     # CssPress.press(css).should eql css
   end
 
-  # it "should remove unnecessary values from padding/margin" do
-    # CssPress.press('a{padding:0 0 0 0}').should eql 'a{padding:0}'
-    # CssPress.press('a{padding:0 0 10px 0}').should eql 'a{padding:0 0 10px}'
-    # CssPress.press('a{padding:0 auto 0 auto}').should eql 'a{padding:0 auto}'
-    # CssPress.press('a{background-position:0 0}').should eql 'a{background-position:0 0}'
-  # end
+  it "should remove unnecessary values from padding/margin" do
+    pending "Not implemented yet" do
+      CssPress.press('a{padding:0 0 0 0}').should eql 'a{padding:0}'
+      CssPress.press('a{padding:0 0 10px 0}').should eql 'a{padding:0 0 10px}'
+      CssPress.press('a{padding:0 auto 0 auto}').should eql 'a{padding:0 auto}'
+      CssPress.press('a{background-position:0 0}').should eql 'a{background-position:0 0}'
+    end
+  end
 
   it "should remove empty rules" do
     CssPress.press('a{}').should eql ''
@@ -119,99 +126,118 @@ describe CssPress do
     CssPress.press('@media print{a{}b{c:d}}').should eql '@media print{b{c:d}}'
   end
 
-  # it "should combine all background related properties" do
-    # css_in = 'a{
-    #   background-color: #fff;
-    #   background-image: url(image.gif);
-    #   background-repeat: repeat-x; 
-    #   background-attachment: fixed; 
-    #   background-position: 0 0}'
-    # css_out = 'a{background:#fff url(image.gif) repeat-x fixed 0 0}'
-    # CssPress.press(css_in).should eql css_out
-  # end
+  it "should combine all background related properties" do
+    pending "Not implemented yet" do
+      css_in = 'a{
+        background-color: #fff;
+        background-image: url(image.gif);
+        background-repeat: repeat-x; 
+        background-attachment: fixed; 
+        background-position: 0 0}'
+      css_out = 'a{background:#fff url(image.gif) repeat-x fixed 0 0}'
+      CssPress.press(css_in).should eql css_out
+    end
+  end
 
-  # it "should combine all border related properties" do
-    # css_in = 'a{
-    #   border-left-color: #000;
-    #   border-left-style: solid;
-    #   border-left-width: 2px;
-    #   border-right-color: #000;
-    #   border-right-style: solid;
-    #   border-right-width: 2px;
-    #   border-top-color: #000;
-    #   border-top-style: solid;
-    #   border-top-width: 3px}'
-    # css_out = 'a{border:solid #000;border-width:3px 2px 0}'
-    # CssPress.press(css_in).should eql css_out
-  # end
+  it "should combine all border related properties" do
+    pending "Not implemented yet" do
+      css_in = 'a{
+        border-left-color: #000;
+        border-left-style: solid;
+        border-left-width: 2px;
+        border-right-color: #000;
+        border-right-style: solid;
+        border-right-width: 2px;
+        border-top-color: #000;
+        border-top-style: solid;
+        border-top-width: 3px}'
+      css_out = 'a{border:solid #000;border-width:3px 2px 0}'
+      CssPress.press(css_in).should eql css_out
+    end
+  end
 
-  # it "should combine all border-radius related properties" do
+  it "should combine all border-radius related properties" do
+    pending "Not implemented yet"
     # -moz- -webkit- -o-
-  # end
+  end
 
-  # it "should combine all font related properties" do
-    # css_in = 'a{
-    #   font-style: italic;
-    #   font-variant: small-caps;
-    #   font-weight: 500;
-    #   font-size: 1em;
-    #   line-height: 24px;
-    #   font-family: arial,sans-serif}'
-    # css_out = 'a{font:italic small-caps 500 1em/24px arial,sans-serif}'
-    # CssPress.press(css_in).should eql css_out
-  # end
+  it "should combine all font related properties" do
+    pending "Not implemented yet" do
+      css_in = 'a{
+        font-style: italic;
+        font-variant: small-caps;
+        font-weight: 500;
+        font-size: 1em;
+        line-height: 24px;
+        font-family: arial,sans-serif}'
+      css_out = 'a{font:italic small-caps 500 1em/24px arial,sans-serif}'
+      CssPress.press(css_in).should eql css_out
+    end
+  end
 
-  # it "should minimize font-family" do
-  # end
+  it "should minimize font-family" do
+    pending "Not implemented yet"
+  end
 
-  # it "should combine all list related properties" do
-    # css_in = 'a{
-    #   list-style-type: circle;
-    #   list-style-position: inside;
-    #   list-style-image: url(bullet.gif)}'
-    # css_out = 'a{list-style:inside circle url(bullet.gif)}'
-    # CssPress.press(css_in).should eql css_out
-  # end
+  it "should combine all list related properties" do
+    pending "Not implemented yet" do
+      css_in = 'a{
+        list-style-type: circle;
+        list-style-position: inside;
+        list-style-image: url(bullet.gif)}'
+      css_out = 'a{list-style:inside circle url(bullet.gif)}'
+      CssPress.press(css_in).should eql css_out
+    end
+  end
 
-  # it "should combine all outline related properties" do
-    # css_in = 'a{
-    #   outline-color: #fff;
-    #   outline-style: dotted;
-    #   outline-width: 1px}'
-    # css_out = 'a{outline:#fff dotted 1px}'
-    # CssPress.press(css_in).should eql css_out
-  # end
+  it "should combine all outline related properties" do
+    pending "Not implemented yet" do
+      css_in = 'a{
+        outline-color: #fff;
+        outline-style: dotted;
+        outline-width: 1px}'
+      css_out = 'a{outline:#fff dotted 1px}'
+      CssPress.press(css_in).should eql css_out
+    end
+  end
 
-  # it "should combine all margin/padding related properties" do
-    # css_in = 'a{margin-top:1px;margin-bottom:2px;margin-right:3px;margin-left:0px}'
-    # css_out = 'a{margin:1px 3px 2px 0}'
-    # CssPress.press(css_in).should eql css_out
+  it "should combine all margin/padding related properties" do
+    pending "Not implemented yet" do
+      css_in = 'a{margin-top:1px;margin-bottom:2px;margin-right:3px;margin-left:0px}'
+      css_out = 'a{margin:1px 3px 2px 0}'
+      CssPress.press(css_in).should eql css_out
 
-    # css_in = 'a{margin-top:1px;margin-bottom:1px;margin-right:1px;margin-left:1px}'
-    # css_out = 'a{margin:1px}'
-    # CssPress.press(css_in).should eql css_out
+      css_in = 'a{margin-top:1px;margin-bottom:1px;margin-right:1px;margin-left:1px}'
+      css_out = 'a{margin:1px}'
+      CssPress.press(css_in).should eql css_out
 
-    # css_in = 'a{padding-top:1px;padding-bottom:2px;padding-right:3px;padding-left:0px}'
-    # css_out = 'a{padding:1px 3px 2px 0}'
-    # CssPress.press(css_in).should eql css_out
-  # end
+      css_in = 'a{padding-top:1px;padding-bottom:2px;padding-right:3px;padding-left:0px}'
+      css_out = 'a{padding:1px 3px 2px 0}'
+      CssPress.press(css_in).should eql css_out
+    end
+  end
 
-  # it "should combine rules with the same selectors" do
-    # css_in = 'a{color:red}a{text-decoration:none}'
-    # css_out = 'a{color:red;text-decoration:none}'
-    # CssPress.press(css_in).should eql css_out
-  # end
+  it "should combine rules with the same selectors" do
+    pending "Not implemented yet" do
+      css_in = 'a{color:red}a{text-decoration:none}'
+      css_out = 'a{color:red;text-decoration:none}'
+      CssPress.press(css_in).should eql css_out
+    end
+  end
 
-  # it "should combine rules with the same rulesets" do
-    # css_in = 'a{color:red}b{color:red}'
-    # css_out = 'a,b{color:red}'
-    # CssPress.press(css_in).should eql css_out
-  # end
+  it "should combine rules with the same rulesets" do
+    pending "Not implemented yet" do
+      css_in = 'a{color:red}b{color:red}'
+      css_out = 'a,b{color:red}'
+      CssPress.press(css_in).should eql css_out
+    end
+  end
 
-  # it "should inline import" do
-  # end
+  it "should inline import" do
+    pending "Not implemented yet"
+  end
 
-  # it "should inline small images" do
-  # end
-
+  it "should inline small images" do
+    pending "Not implemented yet"
+  end
 end
